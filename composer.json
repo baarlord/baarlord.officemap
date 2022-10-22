@@ -1,0 +1,23 @@
+{
+  "name": "baarlord/baarlord.officemap",
+  "description": "The module allows you to create and display an office map.",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Leo Kiselove",
+      "email": "leosard@yandex.ru"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "classmap": ["lib"]
+  },
+  "autoload-dev": {
+    "classmap": ["test"]
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5.10"
+  }
+}
