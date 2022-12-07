@@ -5,6 +5,7 @@ use Bitrix\Main\ErrorCollection;
 use Bitrix\Main\HttpRequest;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
+use Bitrix\Main\UrlRewriter;
 
 Loc::loadMessages(__FILE__);
 
@@ -56,10 +57,24 @@ class baarlord_officemap extends CModule
                 continue;
             }
             CopyDirFiles(
-                dirname(__DIR__) . '/install/officemap',
-                $_SERVER['DOCUMENT_ROOT'] . $site['DIR'] . 'officemap'
+                __DIR__ . '/sections/officemap',
+                $_SERVER['DOCUMENT_ROOT'] . $site['DIR'] . 'officemap',
+                true,
+                true
             );
+            UrlRewriter::add($site['SITE_ID'], [
+                'CONDITION' => '#^/officemap/#',
+                'RULE' => '',
+                'ID' => 'baarlord.officemap:offices',
+                'PATH' => '/officemap/index.php',
+            ]);
         }
+        CopyDirFiles(
+            __DIR__ . '/components',
+            dirname(__DIR__,3) . '/components/baarlord.officemap',
+            true,
+            true
+        );
     }
 
     private function getSites(): array
@@ -113,7 +128,11 @@ class baarlord_officemap extends CModule
     {
         foreach ($this->getSites() as $site) {
             DeleteDirFilesEx($site['DIR'] . 'officemap');
+            UrlRewriter::delete($site['SITE_ID'], [
+                'ID' => 'baarlord.officemap:offices',
+            ]);
         }
+        DeleteDirFilesEx('/bitrix/components/baarlord.officemap');
     }
 
     public function UnInstallDB()
