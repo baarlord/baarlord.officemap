@@ -10,8 +10,7 @@ $APPLICATION->SetTitle('Карта офиса');
         'SEF_FOLDER' => SITE_DIR . 'officemap/',
         'SEF_URL_TEMPLATES' => [
             'offices' => '',
-            'section' => '#SECTION_CODE#/',
-            'detail' => '#SECTION_CODE#/#ELEMENT_CODE#/',
+            'detail' => '#ELEMENT_CODE#/',
         ],
     ],
     false,

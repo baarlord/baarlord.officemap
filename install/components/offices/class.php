@@ -37,11 +37,9 @@ class boOfficesComponent extends CBitrixComponent
         $variables = [];
         $defaultUrlTemplates404 = [
             'offices' => '',
-            'section' => '#SECTION_CODE#/',
-            'detail' => '#SECTION_CODE#/#ELEMENT_CODE#/',
+            'detail' => '#ELEMENT_CODE#/',
         ];
         $componentVariableAliases = [
-            'SECTION_CODE',
             'ELEMENT_CODE',
         ];
 
@@ -64,11 +62,8 @@ class boOfficesComponent extends CBitrixComponent
             $componentPage = 'offices';
             $is404 = true;
         }
-        if ($componentPage === 'section') {
-            $is404 = !isset($variables['SECTION_CODE']);
-        }
         if ($componentPage === 'detail') {
-            $is404 = (!isset($variables['SECTION_CODE']) || !isset($variables['ELEMENT_CODE']));
+            $is404 = !isset($variables['ELEMENT_CODE']);
         }
         if ($is404) {
             $folder404 = str_replace("\\", "/", $this->arParams['SEF_FOLDER']);

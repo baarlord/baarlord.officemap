@@ -1,4 +1,4 @@
 <?php
 defined('B_PROLOG_INCLUDED') || die;
-
-?>Разделы
+?>
+Компонент offices.list

@@ -1,6 +1,6 @@
 {
   "name": "baarlord/baarlord.officemap",
-  "description": "The module allows you to create and display an office map.",
+  "description": "The module for creating an interactive office map indicating the locations of employees.",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
@@ -10,6 +10,9 @@
     }
   ],
   "require": {
+    "doctrine/orm": "^2.13",
+    "symfony/cache": "^5.0-dev",
+    "doctrine/annotations": "^1.13"
   },
   "autoload": {
     "classmap": ["lib"]
