@@ -19,7 +19,7 @@ while ($site = $getListResult->Fetch()) {
     <input type="hidden" name="lang" value="<?= LANG ?>"/>
     <input type="hidden" name="id" value="baarlord.officemap"/>
     <input type="hidden" name="install" value="Y"/>
-    <input type="hidden" name="step" value="2"/>
+    <input type="hidden" name="step" value="1"/>
 
     <table border="1" cellpadding="3" cellspacing="0">
         <tr>

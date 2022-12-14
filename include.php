@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Application;
+use Bitrix\Main\DI\ServiceLocator;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
@@ -23,3 +24,4 @@ $dbParams = [
 
 $config = ORMSetup::createAnnotationMetadataConfiguration($paths, $isDevMode);
 $entityManager = EntityManager::create($dbParams, $config);
+ServiceLocator::getInstance()->addInstance('DoctrineEntityManager', $entityManager);

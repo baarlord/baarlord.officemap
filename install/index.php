@@ -1,7 +1,10 @@
 <?php
 
 use Bitrix\Main\Application;
+use Bitrix\Main\DB\SqlQueryException;
+use Bitrix\Main\Error as BitrixError;
 use Bitrix\Main\ErrorCollection;
+use Bitrix\Main\HttpApplication;
 use Bitrix\Main\HttpRequest;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
@@ -31,14 +34,19 @@ class baarlord_officemap extends CModule
 
     public function DoInstall()
     {
-        $step = $this->request->get('step') ? (int)$this->request->get('step') : 0;
-        if ($step < 2) {
+        $step = $this->getCurrentStep();
+        if ($step < 1) {
             $this->showInstallStep(1);
-        } else if ($step === 2) {
+        } else if ($step === 1) {
             $this->InstallFiles();
         }
         ModuleManager::registerModule($this->MODULE_ID);
         $this->InstallDB();
+    }
+
+    private function getCurrentStep(): int
+    {
+        return $this->request->get('step') ? (int)$this->request->get('step') : 0;
     }
 
     protected function showInstallStep(int $step)
@@ -71,7 +79,7 @@ class baarlord_officemap extends CModule
         }
         CopyDirFiles(
             __DIR__ . '/components',
-            dirname(__DIR__,3) . '/components/baarlord.officemap',
+            dirname(__DIR__, 3) . '/components/baarlord.officemap',
             true,
             true
         );
@@ -93,12 +101,26 @@ class baarlord_officemap extends CModule
 
     public function InstallDB()
     {
+        $this->createTable('bo_office');
         $this->addItemToLeftMenu([
             'TEXT' => Loc::getMessage('BO_OFFICE_MAP'),
             'LINK' => '/officemap/',
             'ID' => 'officemap',
             'NEW_PAGE' => 'N',
         ]);
+    }
+
+    private function createTable(string $tableName): void
+    {
+        $connection = HttpApplication::getConnection();
+        $filePath = __DIR__ . '/db/' . $tableName . '.sql';
+        if (!file_exists($filePath)) {
+            $this->errors->setError(new BitrixError('Can\'t find sql script to create the table ' . $tableName));
+        }
+        $contents = file_get_contents($filePath);
+        foreach ($connection->parseSqlBatch($contents) as $sql) {
+            $connection->query($sql);
+        }
     }
 
     private function addItemToLeftMenu(array $newItem): void
@@ -119,9 +141,24 @@ class baarlord_officemap extends CModule
 
     public function DoUninstall()
     {
-        $this->UnInstallFiles();
-        $this->UnInstallDB();
+        global $APPLICATION;
+        $step = $this->getCurrentStep();
+        if ($step < 1) {
+            $this->showUninstallStep(1);
+        } elseif ($step === 1) {
+            $this->UnInstallFiles();
+            $this->UnInstallDB();
+        }
         ModuleManager::unRegisterModule($this->MODULE_ID);
+    }
+
+    protected function showUninstallStep(int $step)
+    {
+        global $APPLICATION;
+        $APPLICATION->IncludeAdminFile(
+            Loc::getMessage('BO_UNINSTALL_TITLE', ['#STEP#' => $step]),
+            __DIR__ . '/unstep' . $step . '.php'
+        );
     }
 
     public function UnInstallFiles()
@@ -137,7 +174,15 @@ class baarlord_officemap extends CModule
 
     public function UnInstallDB()
     {
+        if ($this->request->get('droptables') === 'Y') {
+            $this->dropTable('bo_office');
+        }
         $this->removeLeftMenuItem('officemap');
+    }
+
+    private function dropTable(string $tableName): void
+    {
+        Application::getConnection()->query("DROP TABLE IF EXISTS " . $tableName);
     }
 
     private function removeLeftMenuItem(string $linkId): void

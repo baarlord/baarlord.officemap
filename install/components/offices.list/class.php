@@ -10,8 +10,8 @@ class boOfficesListComponent extends CBitrixComponent
     {
         try {
             $this->loadModules();
-            $filter = $this->getFilter();
-            $this->arResult['ITEMS'] = $this->getItems();
+/*            $filter = $this->getFilter();
+            $this->arResult['ITEMS'] = $this->getItems();*/
             $this->includeComponentTemplate();
         } catch (LoaderException $e) {
             ShowError($e->getMessage());
@@ -25,7 +25,7 @@ class boOfficesListComponent extends CBitrixComponent
     private function loadModules(): void
     {
         if (
-            !Loader::includeModule('baarlord.officemap1')
+            !Loader::includeModule('baarlord.officemap')
         ) {
             throw new LoaderException('Can\'t load required modules');
         }
@@ -33,9 +33,11 @@ class boOfficesListComponent extends CBitrixComponent
 
     private function getFilter(): array
     {
+        return [];
     }
 
     private function getItems(): array
     {
+        return [];
     }
 }
