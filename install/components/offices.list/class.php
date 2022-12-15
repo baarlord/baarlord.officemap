@@ -10,8 +10,8 @@ class boOfficesListComponent extends CBitrixComponent
     {
         try {
             $this->loadModules();
-/*            $filter = $this->getFilter();
-            $this->arResult['ITEMS'] = $this->getItems();*/
+            $filter = $this->getFilter();
+            $this->arResult['ITEMS'] = $this->getItems();
             $this->includeComponentTemplate();
         } catch (LoaderException $e) {
             ShowError($e->getMessage());

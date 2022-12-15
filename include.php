@@ -13,6 +13,7 @@ $paths = [__DIR__. '/lib/Entity'];
 $isDevMode = false;
 
 $bitrixConnectionConfig = Application::getConnection()->getConfiguration();
+$serviceLocator = ServiceLocator::getInstance();
 $dbParams = [
     'driver' => 'pdo_mysql',
     'user' => $bitrixConnectionConfig['login'],
@@ -24,4 +25,4 @@ $dbParams = [
 
 $config = ORMSetup::createAnnotationMetadataConfiguration($paths, $isDevMode);
 $entityManager = EntityManager::create($dbParams, $config);
-ServiceLocator::getInstance()->addInstance('DoctrineEntityManager', $entityManager);
+$serviceLocator->addInstance('baarlord.officemap.doctrineEntityManager', $entityManager);

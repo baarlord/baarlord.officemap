@@ -2,11 +2,11 @@
 
 namespace Baarlord\OfficeMap\Entity;
 
-use App\Repository\OfficeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=OfficeRepository::class)
+ * @ORM\Entity
+ * @ORM\Table(name="bo_office")
  */
 class Office
 {
@@ -46,6 +46,34 @@ class Office
      * @ORM\Column(type="integer")
      */
     private $sort;
+
+    /**
+     * @param $id
+     * @param $name
+     * @param $active
+     * @param $code
+     * @param $floor
+     * @param $file
+     * @param $sort
+     */
+    public function __construct(
+        $id,
+        $name,
+        $active,
+        $code,
+        $floor,
+        $file,
+        $sort
+    )
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->active = $active;
+        $this->code = $code;
+        $this->floor = $floor;
+        $this->file = $file;
+        $this->sort = $sort;
+    }
 
     public function getId(): ?int
     {

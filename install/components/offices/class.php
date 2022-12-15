@@ -36,11 +36,11 @@ class boOfficesComponent extends CBitrixComponent
 
         $variables = [];
         $defaultUrlTemplates404 = [
-            'offices' => '',
-            'detail' => '#ELEMENT_CODE#/',
+            'offices' => 'list/',
+            'detail' => 'detail/#ELEMENT_ID#/',
         ];
         $componentVariableAliases = [
-            'ELEMENT_CODE',
+            'ELEMENT_ID',
         ];
 
         $urlTemplates = $this->engine::makeComponentUrlTemplates(
@@ -58,12 +58,22 @@ class boOfficesComponent extends CBitrixComponent
         );
 
         $is404 = false;
+
+        $this->arResult = [
+            'FOLDER' => '',
+            'URL_TEMPLATES' => $urlTemplates,
+            'VARIABLES' => $variables,
+            'ALIASES' => $variableAliases,
+            'TEMPLATE' => '.default',
+        ];
+
         if (!$componentPage) {
             $componentPage = 'offices';
             $is404 = true;
         }
         if ($componentPage === 'detail') {
-            $is404 = !isset($variables['ELEMENT_CODE']);
+            $is404 = !isset($variables['ELEMENT_ID']);
+            $this->arResult['TEMPLATE'] = 'edit';
         }
         if ($is404) {
             $folder404 = str_replace("\\", "/", $this->arParams['SEF_FOLDER']);
@@ -81,13 +91,6 @@ class boOfficesComponent extends CBitrixComponent
         }
 
         $this->engine::initComponentVariables($componentPage, $componentVariableAliases, $variableAliases, $variables);
-
-        $this->arResult = [
-            'FOLDER' => '',
-            'URL_TEMPLATES' => $urlTemplates,
-            'VARIABLES' => $variables,
-            'ALIASES' => $variableAliases,
-        ];
         $this->includeComponentTemplate($componentPage);
     }
 }
