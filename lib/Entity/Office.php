@@ -75,6 +75,19 @@ class Office
         $this->sort = $sort;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'ID' => $this->id,
+            'NAME' => $this->name,
+            'ACTIVE' => $this->active,
+            'CODE' => $this->code,
+            'FLOOR' => $this->floor,
+            'FILE' => $this->file,
+            'SORT' => $this->sort,
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;
