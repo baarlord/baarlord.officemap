@@ -38,6 +38,11 @@ class Office
     private $floor;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $address;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $file;
@@ -53,6 +58,7 @@ class Office
      * @param $active
      * @param $code
      * @param $floor
+     * @param $address
      * @param $file
      * @param $sort
      */
@@ -62,6 +68,7 @@ class Office
         $active,
         $code,
         $floor,
+        $address,
         $file,
         $sort
     )
@@ -71,8 +78,23 @@ class Office
         $this->active = $active;
         $this->code = $code;
         $this->floor = $floor;
+        $this->address = $address;
         $this->file = $file;
         $this->sort = $sort;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'ID' => $this->id,
+            'NAME' => $this->name,
+            'ACTIVE' => $this->active,
+            'CODE' => $this->code,
+            'FLOOR' => $this->floor,
+            'ADDRESS' => $this->address,
+            'FILE' => $this->file,
+            'SORT' => $this->sort,
+        ];
     }
 
     public function getId(): ?int
@@ -124,6 +146,18 @@ class Office
     public function setFloor(string $floor): self
     {
         $this->floor = $floor;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
